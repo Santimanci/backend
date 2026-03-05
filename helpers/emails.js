@@ -7,27 +7,33 @@ dotenv.config();
  * Crea el transporte de email con Gmail (compartido para todos los emails)
  */
 const crearTransporte = () => {
-    return nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-        },
-    });
+  return nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+    tls: {
+      // No fallar si hay problemas de verificación de certificados en Render
+      rejectUnauthorized: false
+    }
+  });
 };
 
 /**
  * Envía email de bienvenida al nuevo usuario registrado
  */
 export const enviarEmailBienvenida = async (nombre, email) => {
-    try {
-        const transporte = crearTransporte();
+  try {
+    const transporte = crearTransporte();
 
-        const opciones = {
-            from: `"Numerología ✨" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: "¡Bienvenido a Numerología! ✨",
-            html: `
+    const opciones = {
+      from: `"Numerología ✨" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "¡Bienvenido a Numerología! ✨",
+      html: `
         <!DOCTYPE html>
         <html>
         <head>
@@ -107,35 +113,35 @@ export const enviarEmailBienvenida = async (nombre, email) => {
         </body>
         </html>
       `,
-        };
+    };
 
-        await transporte.sendMail(opciones);
-        console.log(`✅ Email de bienvenida enviado a ${email}`);
-    } catch (error) {
-        console.error("❌ Error al enviar email de bienvenida:", error.message);
-        // No lanzamos error para no afectar el registro
-    }
+    await transporte.sendMail(opciones);
+    console.log(`✅ Email de bienvenida enviado a ${email}`);
+  } catch (error) {
+    console.error("❌ Error al enviar email de bienvenida:", error.message);
+    // No lanzamos error para no afectar el registro
+  }
 };
 
 /**
  * Envía email de recordatorio diario para generar lectura
  */
 export const enviarEmailRecordatorio = async (nombre, email) => {
-    try {
-        const transporte = crearTransporte();
+  try {
+    const transporte = crearTransporte();
 
-        const hoy = new Date().toLocaleDateString("es-CO", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        });
+    const hoy = new Date().toLocaleDateString("es-CO", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
-        const opciones = {
-            from: `"Numerología ✨" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: "🌅 Tu lectura numerológica del día te espera",
-            html: `
+    const opciones = {
+      from: `"Numerología ✨" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "🌅 Tu lectura numerológica del día te espera",
+      html: `
         <!DOCTYPE html>
         <html>
         <head>
@@ -194,11 +200,11 @@ export const enviarEmailRecordatorio = async (nombre, email) => {
         </body>
         </html>
       `,
-        };
+    };
 
-        await transporte.sendMail(opciones);
-        console.log(`✅ Recordatorio enviado a ${email}`);
-    } catch (error) {
-        console.error(`❌ Error al enviar recordatorio a ${email}:`, error.message);
-    }
+    await transporte.sendMail(opciones);
+    console.log(`✅ Recordatorio enviado a ${email}`);
+  } catch (error) {
+    console.error(`❌ Error al enviar recordatorio a ${email}:`, error.message);
+  }
 };

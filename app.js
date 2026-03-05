@@ -1,6 +1,10 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import dns from "node:dns";
+
+// SOLUCIÓN AL ERROR ENETUNREACH EN RENDER: Forzar Node a usar IPv4 para nodemailer
+dns.setDefaultResultOrder("ipv4first");
 
 import routerUsuario from "./routes/usuario.js";
 import routerPago from "./routes/pago.js";
