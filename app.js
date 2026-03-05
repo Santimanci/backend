@@ -8,6 +8,7 @@ import routerAdmin from "./routes/admin.js";
 import routerLectura from "./routes/lecturas.js";
 import { conectarMongo } from "./database/cnx-mongo.js";
 import { iniciarTareaVerificacionMembresias } from "./cron/validarMembresia.js";
+import { iniciarRecordatoriosDiarios } from "./cron/recordatorios.js";
 import { validarJWT } from "./helpers/validar-JWT.js";
 import { validarAdmin } from "./middlewares/admin.js";
 dotenv.config();
@@ -16,6 +17,7 @@ const app = express();
 await conectarMongo();
 
 iniciarTareaVerificacionMembresias();
+iniciarRecordatoriosDiarios();
 app.use(cors());
 app.use(express.json());
 

@@ -1,6 +1,7 @@
 import bcryptjs from 'bcryptjs';
 import { Usuario } from "../models/usuario.js";
 import { generarJWT } from '../helpers/validar-JWT.js';
+import { enviarEmailBienvenida } from '../helpers/emails.js';
 
 // GET: Obtener todos los usuarios
 const getUsuarios = async (req, res) => {
@@ -48,6 +49,9 @@ const postUsuario = async (req, res) => {
 
         // Generar token JWT
         const token = await generarJWT(usuario._id);
+
+        // Enviar email de bienvenida (fire-and-forget)
+        enviarEmailBienvenida(nombre, email).catch(() => { });
 
         res.status(201).json({
             msg: 'Usuario registrado exitosamente',
