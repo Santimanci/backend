@@ -1,6 +1,7 @@
 import cron from "node-cron";
 import { Pago } from "../models/pago.js";
 import { Usuario } from "../models/usuario.js";
+import { enviarEmailMembresiaVencida } from "../helpers/emails.js";
 
 export function iniciarTareaVerificacionMembresias() {
   cron.schedule(
@@ -31,10 +32,16 @@ export function iniciarTareaVerificacionMembresias() {
 
             // Si no tiene más pagos activos, marcar usuario como inactivo
             if (!pagoActivoRestante) {
-              await Usuario.findByIdAndUpdate(pago.usuario_id, {
-                estado: "inactivo",
-              });
-              usuariosActualizados++;
+              const usuario = await Usuario.findByIdAndUpdate(
+                pago.usuario_id,
+                { estado: "inactivo" },
+                { new: true },
+              );
+
+              if (usuario) {
+                await enviarEmailMembresiaVencida(usuario.nombre, usuario.email);
+                usuariosActualizados++;
+              }
             }
           }
         }

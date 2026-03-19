@@ -201,3 +201,75 @@ export const enviarEmailRecordatorio = async (nombre, email) => {
     console.error(`❌ Error al enviar recordatorio a ${email}:`, error.response?.data || error.message);
   }
 };
+
+/**
+ * Envía email cuando la membresía ha vencido
+ */
+export const enviarEmailMembresiaVencida = async (nombre, email) => {
+  try {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f0c29;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); padding: 40px 0;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;">
+                
+                <!-- Header -->
+                <tr>
+                  <td style="padding: 40px 40px 10px; text-align: center;">
+                    <h1 style="color: #ff9a9e; font-size: 28px; margin: 0;">⌛ Membresía Vencida</h1>
+                  </td>
+                </tr>
+
+                <!-- Contenido -->
+                <tr>
+                  <td style="padding: 20px 40px;">
+                    <h2 style="color: #ffffff; font-size: 22px; margin: 0 0 12px;">¡Hola, ${nombre}! 👋</h2>
+                    <p style="color: #c9b8e8; font-size: 16px; line-height: 1.6; margin: 0 0 10px;">
+                      Te informamos que tu membresía premium en Numerología ha <strong style="color: #ff9a9e;">vencido</strong>.
+                    </p>
+                    <p style="color: #c9b8e8; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                      Para seguir accediendo a tus lecturas diarias personalizadas y descubrir qué tienen los números para ti, te invitamos a renovar tu suscripción.
+                    </p>
+                  </td>
+                </tr>
+
+                <!-- Botón CTA -->
+                <tr>
+                  <td style="padding: 10px 40px 30px; text-align: center;">
+                    <a href="${process.env.FRONTEND_URL}" 
+                       style="display: inline-block; background: linear-gradient(135deg, #fbc2eb, #a6c1ee); color: #1a1a2e; text-decoration: none; padding: 14px 40px; border-radius: 50px; font-size: 16px; font-weight: bold; letter-spacing: 1px;">
+                      Renovar mi membresía 🔮
+                    </a>
+                  </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 20px 40px 30px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08);">
+                    <p style="color: #8b7fa8; font-size: 13px; margin: 0;">
+                      Si crees que esto es un error, por favor contáctanos.<br>
+                      © ${new Date().getFullYear()} Numerología. Todos los derechos reservados.
+                    </p>
+                  </td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `;
+
+    await enviarEmailBrevo(email, "⌛ Tu membresía de Numerología ha vencido", html);
+    console.log(`✅ Email de vencimiento enviado a ${email}`);
+  } catch (error) {
+    console.error(`❌ Error al enviar email de vencimiento a ${email}:`, error.response?.data || error.message);
+  }
+};
