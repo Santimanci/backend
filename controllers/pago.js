@@ -42,7 +42,7 @@ const crearPreferencia = async (req, res) => {
             id: "membresia-numerologia",
             title: "Membresía Numerología",
             quantity: 1,
-            unit_price: 19900,
+            unit_price: 2000,
             currency_id: "COP",
           },
         ],
