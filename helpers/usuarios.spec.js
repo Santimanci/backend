@@ -1,11 +1,12 @@
 import { describe, it, expect, vi } from 'vitest';
 import { validarEmail } from '../helpers/usuarios.js';
 import { Usuario } from '../models/usuario.js';
-
+import { validarExisteUsuario } from './pagos.js';
 // Mockeamos el modelo de Usuario
 vi.mock('../models/usuario.js', () => ({
     Usuario: {
-        findOne: vi.fn() 
+        findOne: vi.fn(),
+        findById: vi.fn()
     }
 }));
 
@@ -24,5 +25,16 @@ describe('validarEmail', () => {
 
         await expect(validarEmail('nuevo@correo.com'))
             .resolves.not.toThrow();
+    });
+
+});
+// Completar el test con la función callback:
+describe('validarExisteUsuario', () => {
+    it('Deberia lanzar error si el usuario no esta registrado', async () => {
+        // Simulamos que el usuario NO existe
+        Usuario.findById.mockResolvedValue(null);
+
+        await expect(validarExisteUsuario('abc123'))
+            .rejects.toThrow('El usuario con ID abc123 no está registrado');
     });
 });
