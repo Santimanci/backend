@@ -6,7 +6,10 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +29,7 @@
     "nodemailer": "^8.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "vitest": "^4.1.4"
   }
 }
