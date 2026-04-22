@@ -28,7 +28,7 @@ describe('validarEmail', () => {
     });
 
 });
-// Completar el test con la función callback:
+
 describe('validarExisteUsuario', () => {
     it('Deberia lanzar error si el usuario no esta registrado', async () => {
         // Simulamos que el usuario NO existe
