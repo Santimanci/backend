@@ -32,7 +32,7 @@ describe('validarEmail', () => {
 describe('validarExisteUsuario', () => {
     it('Deberia lanzar error si el usuario no esta registrado', async () => {
         // Simulamos que el usuario NO existe
-        Usuario.findById.mockResolvedValue(null);
+        usuario.findById.mockResolvedValue(null);
 
         await expect(validarExisteUsuario('abc123'))
             .rejects.toThrow('El usuario con ID abc123 no está registrado');
